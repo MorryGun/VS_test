@@ -25,13 +25,7 @@ paths:
           schema:
             type: "array"
             items:
-              properties:
-                id:
-                  type: "integer"
-                name:
-                  type: "string"
-                rate:
-                  type: "integer"
+              $ref: "#/definitions/Rate"
   /result:
     get:
       operationId: "dummy.result.read_results"
@@ -45,75 +39,90 @@ paths:
           schema:
             type: "array"
             items:
-              properties:
-                result_id:
-                  type: "integer"
-                match_id:
-                  type: "integer"
-                name:
-                  type: "string"
-                points:
-                  type: "integer"
-                date:
-                  type: "string"
+              $ref: "#/definitions/Result" 
     post:
       operationId: "dummy.result.add_result"
       tags:
        - "Result"
       summary: "Add result"
       description: "Post new result"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of results"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Result"
       responses:
         201:
           description: "New result successfully added"
           schema: 
-            type: "array"
-            items:
-              properties:
-                match_id:
-                  type: "integer"
-                name:
-                  type: "string"
-                points:
-                  type: "integer"
-                date:
-                  type: "string"
+            type: "string"
     put:
       operationId: "dummy.result.replace_result"
       tags:
        - "Result"
       summary: "Replace result"
       description: "Replace result with the same result_id"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Result to replace"
+        required: true
+        schema:
+          $ref: "#/definitions/Result"
       responses:
         200:
           description: "New result successfully added"
           schema: 
-            type: "object"
-            items:
-              properties:
-                result_id:
-                  type: "integer"
-                match_id:
-                  type: "integer"
-                name:
-                  type: "string"
-                points:
-                  type: "integer"
-                date:
-                  type: "string"
+            type: "string"
     delete:
       operationId: "dummy.result.delete_result"
       tags:
        - "Result"
       summary: "Delete result"
       description: "Delete result by result_id"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Id of result to delete"
+        required: true
+        schema:
+          type: "integer"
       responses:
         200:
           description: "Result was successfully deleted"
           schema: 
-            type: "object"
-            items:
-              properties:
-                result_id:
-                  type: "integer"
-                
-                
+            type: "string"
+definitions:
+  Result:
+    type: "object"
+    properties:
+      result_id:
+        type: "integer"
+        format: "int32"
+      match_id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      points:
+        type: "integer"
+        format: "int32"
+      date:
+        type: "string"
+        format: "date"
+  Rate:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      rate:
+        type: "integer"
+        format: "int32"
+  
