@@ -12,11 +12,26 @@ def read_results():
     data = result_schema.dump(result)
     return data
 
-def add_result():
-    return {'coming':'soon'}
+
+def add_result(results):
+    for result in results:
+        match_id = result.get("match_id")
+        name = result.get("name")
+        points = result.get("points")
+        date = result.get("date")
+    
+        schema = ResultSchema()
+        new_result = schema.load(result, session=db.session)
+
+        db.session.add(new_result)
+        db.session.commit()
+    
+    return "Result is added successfully"
+
 
 def replace_result():
     return {'coming':'soon'}
+
 
 def delete_result():
     return {'coming':'soon'}

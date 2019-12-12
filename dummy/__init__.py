@@ -8,7 +8,8 @@ from dummy.build_database import create_db
 import connexion
 
 # Read the swagger.yml file to configure the endpoints
-connex_app.add_api('swagger.yml')
+connex_app.add_api('swagger.yml', strict_validation=True,
+    validate_responses=True,)
 
 # Create a URL route in our application for "/"
 @app.route('/')
