@@ -1,0 +1,119 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Article
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /rate:
+    get:
+      operationId: "dummy.rate.read_rate"
+      tags:
+        - "Rate"
+      summary: "Retrieve the rate"
+      description: "Read the rate"
+      responses:
+        200:
+          description: "Successful read rate list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                id:
+                  type: "integer"
+                name:
+                  type: "string"
+                rate:
+                  type: "integer"
+  /result:
+    get:
+      operationId: "dummy.result.read_results"
+      tags:
+        - "Result"
+      summary: "Retrieve results"
+      description: "Read the results"
+      responses:
+        200:
+          description: "Successful read result list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                result_id:
+                  type: "integer"
+                match_id:
+                  type: "integer"
+                name:
+                  type: "string"
+                points:
+                  type: "integer"
+                date:
+                  type: "string"
+    post:
+      operationId: "dummy.result.add_result"
+      tags:
+       - "Result"
+      summary: "Add result"
+      description: "Post new result"
+      responses:
+        201:
+          description: "New result successfully added"
+          schema: 
+            type: "array"
+            items:
+              properties:
+                match_id:
+                  type: "integer"
+                name:
+                  type: "string"
+                points:
+                  type: "integer"
+                date:
+                  type: "string"
+    put:
+      operationId: "dummy.result.replace_result"
+      tags:
+       - "Result"
+      summary: "Replace result"
+      description: "Replace result with the same result_id"
+      responses:
+        200:
+          description: "New result successfully added"
+          schema: 
+            type: "object"
+            items:
+              properties:
+                result_id:
+                  type: "integer"
+                match_id:
+                  type: "integer"
+                name:
+                  type: "string"
+                points:
+                  type: "integer"
+                date:
+                  type: "string"
+    delete:
+      operationId: "dummy.result.delete_result"
+      tags:
+       - "Result"
+      summary: "Delete result"
+      description: "Delete result by result_id"
+      responses:
+        200:
+          description: "Result was successfully deleted"
+          schema: 
+            type: "object"
+            items:
+              properties:
+                result_id:
+                  type: "integer"
+                
+                

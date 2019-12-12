@@ -1,0 +1,7 @@
+Flask
+connexion
+flask_sqlAlchemy
+flask_marshmallow
+marshmallow_sqlalchemy
+marshmallow
+swagger-ui-bundle
