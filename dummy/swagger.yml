@@ -26,6 +26,24 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Rate"
+  /rate/{id}:
+    delete:
+      operationId: "dummy.rate.delete_rate"
+      tags:
+        - "Rate"
+      summary: "Delete rate by id"
+      description: "Delete rate by id"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Delete rate line by id"
+          type: "integer"
+          required: True
+      responses:
+        200:
+          description: "Result is deleted"
+          schema: 
+            type: "string"
   /result:
     get:
       operationId: "dummy.result.read_results"
@@ -54,13 +72,13 @@ paths:
         schema:
           type: "array"
           items:
-            $ref: "#/definitions/Result"
+            $ref: "#/definitions/Result_post_array"
       responses:
         201:
           description: "New result successfully added"
           schema: 
             type: "string"
-    put:
+    patch:
       operationId: "dummy.result.replace_result"
       tags:
        - "Result"
@@ -78,25 +96,43 @@ paths:
           description: "New result successfully added"
           schema: 
             type: "string"
+  /result/{result_id}:
     delete:
       operationId: "dummy.result.delete_result"
       tags:
-       - "Result"
-      summary: "Delete result"
-      description: "Delete result by result_id"
+        - "Result"
+      summary: "Delete result by id"
+      description: "Delete result by id"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Id of result to delete"
-        required: true
-        schema:
+        - name: "result_id"
+          in: "path"
+          description: "Delete result by id"
           type: "integer"
+          required: True
       responses:
         200:
-          description: "Result was successfully deleted"
+          description: "Result is deleted"
           schema: 
             type: "string"
 definitions:
+  Result_post_array:
+    type: "array"
+    items:
+      $ref: "#/definitions/Result_post"
+  Result_post:
+    type: "object"
+    properties:
+      match_id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      points:
+        type: "integer"
+        format: "int32"
+      date:
+        type: "string"
+        format: "date"
   Result:
     type: "object"
     properties:
