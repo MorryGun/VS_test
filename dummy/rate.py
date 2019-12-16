@@ -28,6 +28,7 @@ def delete_rate(id):
 
         return "Record is deleted"
 
+
 def check_current_rates(names):
     current_rates = {}
     for name in names:
@@ -39,6 +40,7 @@ def check_current_rates(names):
             current = record.rate
         current_rates[name] = current
     return current_rates
+
 
 def update_rate(update_rate_dict):
     for record in update_rate_dict:
@@ -54,7 +56,6 @@ def update_rate(update_rate_dict):
             db.session.commit()
 
 def delete_all_rates():
-    rates = Rate.query.filter(Rate.rate!=1000).all()
-    for rate in rates: 
-        db.session.add(rate)
+    Rate.__table__.drop(db.engine)
+    Rate.__table__.create(db.session.bind)
     db.session.commit()
