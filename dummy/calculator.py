@@ -1,4 +1,3 @@
-from dummy.config import db
 from dummy.models import Result, ResultSchema
 from dummy.rate import check_current_rates, update_rate
 
@@ -28,7 +27,6 @@ def calculate_rate(matches):
         for rate in current_rates:
             fond = fond + current_rates[rate]*0.25
 
-
         sum_of_game_points = 0
         min_point = min(points) if min(points) < 0 else 0
         for point in points:
@@ -38,7 +36,6 @@ def calculate_rate(matches):
 
         if sum_of_game_points != 0:
             for rate in current_rates:
-                print("fond is ", fond, "players_points[rate]= ", players_points[rate])
                 prize = fond*(players_points[rate]-min_point)/sum_of_game_points
                 current_rates[rate] = round(0.75 * current_rates[rate] + prize)
 

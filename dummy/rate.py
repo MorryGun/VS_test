@@ -1,4 +1,4 @@
-from flask import make_response, abort
+from flask import abort
 from dummy.config import db
 from dummy.models import Rate, RateSchema
 
@@ -13,17 +13,17 @@ def read_rate():
     return data
 
 
-def delete_rate(id):
-    delete_rate = Rate.query.filter(Rate.id == id).one_or_none()
+def delete_rate(rate_id):
+    rate_to_delete = Rate.query.filter(Rate.id == rate_id).one_or_none()
 
-    if delete_rate is None:
+    if rate_to_delete is None:
         abort(
             404,
-            "Record not found for Id: {id}".format(id=id),
+            "Record not found for Id: {id}".format(id=rate_id),
         )
 
     else:
-        db.session.delete(delete_rate)
+        db.session.delete(rate_to_delete)
         db.session.commit()
 
         return "Record is deleted"
@@ -32,7 +32,6 @@ def delete_rate(id):
 def check_current_rates(names):
     current_rates = {}
     for name in names:
-        current = 0
         record = Rate.query.filter(Rate.name == name).one_or_none()
         if record is None:
             current = 1000
@@ -55,7 +54,9 @@ def update_rate(update_rate_dict):
             db.session.merge(new_record)
             db.session.commit()
 
+
 def delete_all_rates():
     Rate.__table__.drop(db.engine)
+    db.session.commit()
     Rate.__table__.create(db.session.bind)
     db.session.commit()

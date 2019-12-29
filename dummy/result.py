@@ -1,4 +1,4 @@
-from flask import make_response, abort
+from flask import abort
 from dummy.config import db
 from dummy.models import Result, ResultSchema
 from dummy.rate import delete_all_rates
@@ -21,9 +21,6 @@ def add_result(body):
     for result_array in body:
         for result in result_array:
             match_id = result.get("match_id")
-            name = result.get("name")
-            points = result.get("points")
-            date = result.get("date")
 
             matches.add(match_id)
     
@@ -34,17 +31,12 @@ def add_result(body):
             db.session.commit()
 
     calculate_rate(matches)
-        
-    
+
     return "Result is added successfully"
 
 
 def replace_result(body):
     result_id = body.get("result_id")
-    match_id = body.get("match_id")
-    name= body.get("name")
-    points = body.get("points")
-    date = body.get("date")
     
     update_result = Result.query.filter(
         Result.result_id == result_id
@@ -62,33 +54,31 @@ def replace_result(body):
 
         update.result_id = update_result.result_id
         db.session.merge(update)
-        delete_all_rates()
-
-        calculate_rate(select_all_matches())
-
         db.session.commit()
+
+        delete_all_rates()
+        calculate_rate(select_all_matches())
 
         return "Record is updated"
 
 
 def delete_result(result_id):
-    delete_result = Result.query.filter(
+    result_to_delete = Result.query.filter(
         Result.result_id == result_id
     ).one_or_none()
 
-    if delete_result is None:
+    if result_to_delete is None:
         abort(
             404,
             "Result not found for Id: {result_id}".format(result_id=result_id),
         )
 
     else:
-        db.session.delete(delete_result)
-        delete_all_rates()
-
-        calculate_rate(select_all_matches())
-
+        db.session.delete(result_to_delete)
         db.session.commit()
+
+        delete_all_rates()
+        calculate_rate(select_all_matches())
 
         return "Record is deleted"
 
@@ -100,6 +90,5 @@ def select_all_matches():
 
     for item in all_matches:
         matches.add(item.match_id)
-        print(item.match_id)
 
     return matches
