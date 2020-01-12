@@ -96,6 +96,23 @@ paths:
           description: "Result is deleted"
           schema: 
             type: "string"
+  /result/upload:
+    post:
+      operationId: "dummy.result.upload"
+      tags:
+        - "Result"
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: upfile
+          type: file
+          description: .csv file to upload
+      responses:
+          200:
+            description: "File uploaded successfully"
+            schema:
+              type: "string"
 definitions:
   Result_post_array:
     type: "array"

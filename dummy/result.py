@@ -83,6 +83,15 @@ def delete_result(result_id):
         return "Record is deleted"
 
 
+def upload(upfile):
+    if ".csv" not in upfile.filename:
+        abort(
+            404,
+            "Incorrect file extension. Expected: .csv",
+        )
+    return "File uploaded successfully"
+
+
 def select_all_matches():
     matches = set()
 
