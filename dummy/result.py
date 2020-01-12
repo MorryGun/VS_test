@@ -1,3 +1,6 @@
+from io import StringIO
+import csv
+from datetime import datetime
 from flask import abort
 from dummy.config import db
 from dummy.models import Result, ResultSchema
@@ -89,6 +92,7 @@ def upload(upfile):
             404,
             "Incorrect file extension. Expected: .csv",
         )
+    add_results_from_file(upfile)
     return "File uploaded successfully"
 
 
@@ -101,3 +105,52 @@ def select_all_matches():
         matches.add(item.match_id)
 
     return matches
+
+
+def add_results_from_file(file_storage):
+    matches = set()
+
+    result_id = check_current_result_id()
+    match_id = check_current_match_id()
+
+    file_data = StringIO(file_storage.read().decode("utf-8"))
+    reader = csv.reader(file_data, delimiter=',')
+
+    for row in reader:
+        if all(not item for item in row):
+            match_id += 1
+        else:
+            result = Result()
+            result.result_id = result_id
+            result.match_id = match_id
+            result.name = row[0]
+            result.points = int(row[1])
+            result.date = datetime.strptime(row[2], '%Y-%m-%d')
+
+            schema = ResultSchema()
+            dumped_result = schema.dump(result)
+            new_result = schema.load(dumped_result, session=db.session)
+
+            result_id += 1
+            matches.add(result.match_id)
+
+            db.session.add(new_result)
+            db.session.commit()
+    print(matches)
+    calculate_rate(matches)
+
+
+def check_current_match_id():
+    all_matches = Result.query.all()
+    if len(all_matches) > 0:
+        return max(item.match_id for item in all_matches)+1
+    else:
+        return 1
+
+
+def check_current_result_id():
+    all_matches = Result.query.all()
+    if len(all_matches) > 0:
+        return max(item.result_id for item in all_matches)+1
+    else:
+        return 1

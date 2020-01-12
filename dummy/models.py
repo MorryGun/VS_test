@@ -24,7 +24,6 @@ class RateSchema(ma.ModelSchema):
         sqla_session = db.session
 
 
-
 class ResultSchema(ma.ModelSchema):
 
     class Meta:
