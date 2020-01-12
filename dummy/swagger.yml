@@ -26,24 +26,6 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Rate"
-  /rate/{id}:
-    delete:
-      operationId: "dummy.rate.delete_rate"
-      tags:
-        - "Rate"
-      summary: "Delete rate by id"
-      description: "Delete rate by id"
-      parameters:
-        - name: "id"
-          in: "path"
-          description: "Delete rate line by id"
-          type: "integer"
-          required: True
-      responses:
-        200:
-          description: "Result is deleted"
-          schema: 
-            type: "string"
   /result:
     get:
       operationId: "dummy.result.read_results"

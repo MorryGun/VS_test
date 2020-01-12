@@ -13,22 +13,6 @@ def read_rate():
     return data
 
 
-def delete_rate(rate_id):
-    rate_to_delete = Rate.query.filter(Rate.id == rate_id).one_or_none()
-
-    if rate_to_delete is None:
-        abort(
-            404,
-            "Record not found for Id: {id}".format(id=rate_id),
-        )
-
-    else:
-        db.session.delete(rate_to_delete)
-        db.session.commit()
-
-        return "Record is deleted"
-
-
 def check_current_rates(names):
     current_rates = {}
     for name in names:
