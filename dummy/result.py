@@ -5,7 +5,7 @@ from flask import abort
 from dummy.config import db
 from dummy.models import Result, ResultSchema
 from dummy.rate import delete_all_rates
-from dummy.calculator import calculate_rate
+from dummy.calculator import calculate_rate, calculate_rates
 
 
 def read_results():
@@ -33,7 +33,7 @@ def add_result(body):
             db.session.add(new_result)
             db.session.commit()
 
-    calculate_rate(matches)
+    calculate_rates(matches)
 
     return "Result is added successfully"
 
@@ -60,7 +60,7 @@ def replace_result(body):
         db.session.commit()
 
         delete_all_rates()
-        calculate_rate(select_all_matches())
+        calculate_rates(select_all_matches())
 
         return "Record is updated"
 
@@ -81,7 +81,7 @@ def delete_result(result_id):
         db.session.commit()
 
         delete_all_rates()
-        calculate_rate(select_all_matches())
+        calculate_rates(select_all_matches())
 
         return "Record is deleted"
 
@@ -118,6 +118,7 @@ def add_results_from_file(file_storage):
 
     for row in reader:
         if all(not item for item in row):
+            #calculate_rate(match_id)
             match_id += 1
         else:
             result = Result()
@@ -132,12 +133,11 @@ def add_results_from_file(file_storage):
             new_result = schema.load(dumped_result, session=db.session)
 
             result_id += 1
-            matches.add(result.match_id)
+            matches.add(match_id)
 
             db.session.add(new_result)
             db.session.commit()
-    print(matches)
-    calculate_rate(matches)
+    calculate_rates(matches)
 
 
 def check_current_match_id():
