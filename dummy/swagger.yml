@@ -26,6 +26,20 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Rate"
+  /rate/csv:
+    get:
+      operationId: "dummy.rate.get_rate_file"
+      tags:
+       - "Rate"
+      summary: "Get the .csv file with current rate"
+      produces:
+        - text/csv
+      description: "Get the .csv file with current rate"
+      responses:
+        200:
+          description: "A .csv file"
+          schema:
+            type: file
   /result:
     get:
       operationId: "dummy.result.read_results"

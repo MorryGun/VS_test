@@ -13,6 +13,13 @@ def read_rate():
     return data
 
 
+def get_rate_file():
+    # Query the database for all the notes
+    rate = Rate.query.all()
+
+    return "Success"
+
+
 def check_current_rates(names):
     current_rates = {}
     for name in names:

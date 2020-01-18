@@ -118,7 +118,6 @@ def add_results_from_file(file_storage):
 
     for row in reader:
         if all(not item for item in row):
-            #calculate_rate(match_id)
             match_id += 1
         else:
             result = Result()
