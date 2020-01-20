@@ -16,7 +16,7 @@ def read_rate():
 
 
 def get_rate_file():
-    response = Response(generate_file(), mimetype='text/csv')
+    response = Response(generate_file())
     # add a filename
     response.headers.set("Content-Disposition", "attachment", filename="rate.csv")
     return response
