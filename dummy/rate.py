@@ -1,6 +1,8 @@
-from flask import abort
+import csv
+from io import StringIO
 from dummy.config import db
 from dummy.models import Rate, RateSchema
+from werkzeug import Response
 
 
 def read_rate():
@@ -14,10 +16,10 @@ def read_rate():
 
 
 def get_rate_file():
-    # Query the database for all the notes
-    rate = Rate.query.all()
-
-    return "Success"
+    response = Response(generate_file(), mimetype='text/csv')
+    # add a filename
+    response.headers.set("Content-Disposition", "attachment", filename="rate.csv")
+    return response
 
 
 def check_current_rates(names):
@@ -51,3 +53,31 @@ def delete_all_rates():
     db.session.commit()
     Rate.__table__.create(db.session.bind)
     db.session.commit()
+
+
+def generate_file():
+    # Query the database for all the notes
+    rate = Rate.query.all()
+
+    # Serialize the list of notes from our data
+    rate_schema = RateSchema(many=True)
+    rate_data = rate_schema.dump(rate)
+
+    data = StringIO()
+    w = csv.writer(data)
+
+    # write header
+    w.writerow(('Гравець', 'Рейтинг'))
+    yield data.getvalue()
+    data.seek(0)
+    data.truncate(0)
+
+    # write each rate item
+    for item in rate_data:
+        w.writerow((
+            item["name"],
+            item["rate"]
+        ))
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
