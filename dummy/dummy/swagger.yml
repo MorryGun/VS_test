@@ -1,0 +1,177 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Article
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /rate:
+    get:
+      operationId: "dummy.rate.read_rate"
+      tags:
+        - "Rate"
+      summary: "Retrieve the rate"
+      description: "Read the rate"
+      responses:
+        200:
+          description: "Successful read rate list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Rate"
+  /rate/csv:
+    get:
+      operationId: "dummy.rate.get_rate_file"
+      tags:
+       - "Rate"
+      summary: "Get the .csv file with current rate"
+      produces:
+        - text/csv
+      description: "Get the .csv file with current rate"
+      responses:
+        200:
+          description: "A .csv file"
+          schema:
+            type: file
+  /result:
+    get:
+      operationId: "dummy.result.read_results"
+      tags:
+        - "Result"
+      summary: "Retrieve results"
+      description: "Read the results"
+      responses:
+        200:
+          description: "Successful read result list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Result" 
+    post:
+      operationId: "dummy.result.add_result"
+      tags:
+       - "Result"
+      summary: "Add result"
+      description: "Post new result"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of results"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Result_post_array"
+      responses:
+        201:
+          description: "New result successfully added"
+          schema: 
+            type: "string"
+    patch:
+      operationId: "dummy.result.replace_result"
+      tags:
+       - "Result"
+      summary: "Replace result"
+      description: "Replace result with the same result_id"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Result to replace"
+        required: true
+        schema:
+          $ref: "#/definitions/Result"
+      responses:
+        200:
+          description: "New result successfully added"
+          schema: 
+            type: "string"
+  /result/{result_id}:
+    delete:
+      operationId: "dummy.result.delete_result"
+      tags:
+        - "Result"
+      summary: "Delete result by id"
+      description: "Delete result by id"
+      parameters:
+        - name: "result_id"
+          in: "path"
+          description: "Delete result by id"
+          type: "integer"
+          required: True
+      responses:
+        200:
+          description: "Result is deleted"
+          schema: 
+            type: "string"
+  /result/upload:
+    post:
+      operationId: "dummy.result.upload"
+      tags:
+        - "Result"
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: upfile
+          type: file
+          description: .csv file to upload
+      responses:
+          200:
+            description: "File uploaded successfully"
+            schema:
+              type: "string"
+definitions:
+  Result_post_array:
+    type: "array"
+    items:
+      $ref: "#/definitions/Result_post"
+  Result_post:
+    type: "object"
+    properties:
+      match_id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      points:
+        type: "integer"
+        format: "int32"
+      date:
+        type: "string"
+        format: "date"
+  Result:
+    type: "object"
+    properties:
+      result_id:
+        type: "integer"
+        format: "int32"
+      match_id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      points:
+        type: "integer"
+        format: "int32"
+      date:
+        type: "string"
+        format: "date"
+  Rate:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      rate:
+        type: "integer"
+        format: "int32"
+  
